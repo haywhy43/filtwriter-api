@@ -4,7 +4,10 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const knex = require('knex');
 const bcrypt = require('bcryptjs');
-const Register = require('./controllers/register')
+const verifyToken = require("./middleware/jwt");
+const Home = require('./controllers/homeController')
+const Register = require('./controllers/register');
+const Login = require('./controllers/login');
 
 dotenv.config()
 
@@ -24,22 +27,26 @@ const db = knex({
 
 
 
-app.use(cors())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded())
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
-app.get('/', (req, res) => {
-    db.select('*').from('users').then(data =>{
-        res.send(data)
-    })
-})
+app.get('/', 
+    verifyToken.checkToken,
+    Home.homeController
+);
 
 app.post('/register', (req, res) => {
     Register.handleRegister(req, res, db, bcrypt)
     // res.send(req.body)
-})
+});
+
+app.post('/login', (req, res) => {
+    Login.handleLogin(req, res, db, bcrypt)
+    // res.send(req.body)
+});
 
 
 app.listen(port, ()=>{
     console.log('localhost is listening on port ' + port)
-})
+});
