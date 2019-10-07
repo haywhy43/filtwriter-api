@@ -13,7 +13,7 @@ const handleLogin = (req, res, db, bcrypt) => {
                     pass = data[0].password;
 
                 let token = jwt.sign(data[0], config.secret, {
-                    expiresIn: "12h"
+                    expiresIn: "1h"
                 });
 
                 res.status(200).json({
