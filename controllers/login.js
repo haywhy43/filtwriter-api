@@ -9,9 +9,6 @@ const handleLogin = (req, res, db, bcrypt) => {
         .then(data => {
             const isValid = bcrypt.compareSync(req.body.password, data[0].password);
             if (isValid) {
-                let userName = data[0].name,
-                    pass = data[0].password;
-
                 let token = jwt.sign(data[0], config.secret, {
                     expiresIn: "1h"
                 });
