@@ -14,12 +14,12 @@ const handleUpload = (req, res, cloudinary, db) => {
                 created: "now"
             })
             .then(data => {
-                res.status(200).send('Success')
-            }).catch(error => {
-                res.send('An error Occured')
+                res.status(200).send("Success");
+            })
+            .catch(error => {
+                res.send("Failed");
             });
     });
-    // res.json(setting.cloudinary)
 };
 
 module.exports = { handleUpload };
