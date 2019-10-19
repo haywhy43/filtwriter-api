@@ -4,4 +4,12 @@ const handleArticle = (req, res, db) => {
     });
 };
 
-module.exports = { handleArticle };
+const handleDelete = (req, res, db) => {
+    db("articles")
+    .where({id: req.body.id})
+    .del()
+    .then(data => {
+        res.json("sucess")
+    })
+}
+module.exports = { handleArticle, handleDelete };

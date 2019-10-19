@@ -63,6 +63,10 @@ app.post("/article/edit", verifyToken.checkToken, upload.single("picture"), (req
     UploadArticle.handleEdit(req, res, cloudinary, db);
 });
 
+app.delete("/article/delete", verifyToken.checkToken, (req, res) => {
+    Articles.handleDelete(req, res, db);
+});
+
 app.listen(port, () => {
     console.log("localhost is listening on port " + port);
 });
