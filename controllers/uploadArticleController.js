@@ -1,7 +1,5 @@
-const setting = require("../config");
-
 const handleUpload = (req, res, cloudinary, db) => {
-    cloudinary.config(setting.cloudinary);
+    // cloudinary.config(setting.cloudinary);
     const data = req.body;
     cloudinary.uploader.upload(req.file.path, function(error, result) {
         db("articles")
@@ -22,4 +20,28 @@ const handleUpload = (req, res, cloudinary, db) => {
     });
 };
 
-module.exports = { handleUpload };
+const handleEdit = (req, res, cloudinary, db) => {
+    const { author, title, body, profile_id } = req.body;
+    const update = result => {
+        db("articles")
+            .where({ id: req.body.id })
+            .update({
+                title: title,
+                author: author,
+                body: body,
+                profile_id: result ? result.public_id : profile_id
+            })
+            .then(data => {
+                res.json(data);
+            });
+    };
+    if (req.file) {
+        cloudinary.uploader.upload(req.file.path, function(error, result) {
+            update(result);
+        });
+    } else {
+        update();
+    }
+};
+
+module.exports = { handleUpload, handleEdit };

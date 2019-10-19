@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const knex = require("knex");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
-const cloudinary = require('cloudinary').v2
+const cloudinary = require("cloudinary").v2;
 
 // Middleware
 const verifyToken = require("./middleware/jwt");
@@ -17,7 +17,12 @@ const Register = require("./controllers/register");
 const Login = require("./controllers/login");
 const Articles = require("./controllers/articleController");
 const UploadArticle = require("./controllers/uploadArticleController");
+
+// config
+const setting = require("./config");
+
 dotenv.config();
+cloudinary.config(setting.cloudinary);
 
 const port = process.env.PORT;
 const app = express();
@@ -52,6 +57,10 @@ app.get("/articles", verifyToken.checkToken, (req, res) => {
 
 app.post("/article/upload", verifyToken.checkToken, upload.single("picture"), (req, res) => {
     UploadArticle.handleUpload(req, res, cloudinary, db);
+});
+
+app.post("/article/edit", verifyToken.checkToken, upload.single("picture"), (req, res) => {
+    UploadArticle.handleEdit(req, res, cloudinary, db);
 });
 
 app.listen(port, () => {
