@@ -12,4 +12,6 @@ const handleDelete = (req, res, db) => {
         res.json("sucess")
     })
 }
+
+
 module.exports = { handleArticle, handleDelete };

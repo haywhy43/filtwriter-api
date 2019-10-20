@@ -63,6 +63,11 @@ app.post("/article/edit", verifyToken.checkToken, upload.single("picture"), (req
     UploadArticle.handleEdit(req, res, cloudinary, db);
 });
 
+app.post("/article/publish", verifyToken.checkToken, upload.single("picture"), (req, res) => {
+    UploadArticle.handlePublish(req, res, cloudinary, db);
+});
+
+
 app.delete("/article/delete", verifyToken.checkToken, (req, res) => {
     Articles.handleDelete(req, res, db);
 });

@@ -3,7 +3,6 @@ const handleUpload = (req, res, cloudinary, db) => {
     const data = req.body;
     cloudinary.uploader.upload(req.file.path, function(error, result) {
         db("articles")
-            // .returning('users')
             .insert({
                 author: data.author,
                 title: data.title,
@@ -44,4 +43,24 @@ const handleEdit = (req, res, cloudinary, db) => {
     }
 };
 
-module.exports = { handleUpload, handleEdit };
+const handlePublish = (req, res, cloudinary, db) => {
+    const { author, title, body } = req.body;
+    cloudinary.uploader.upload(req.file.path, function(error, result) {
+        db("published_articles")
+            .insert({
+                author: author,
+                title: title,
+                body: body,
+                profile_id: result.public_id,
+                created: "now"
+            })
+            .then(data => {
+                res.status(200).send("Success");
+            })
+            .catch(error => {
+                res.send(error);
+            });
+    });
+};
+
+module.exports = { handleUpload, handleEdit, handlePublish };
