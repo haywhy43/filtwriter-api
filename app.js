@@ -30,7 +30,7 @@ const upload = multer({ dest: "uploads/" });
 const db = knex({
     client: "pg",
     connection: {
-        host: "127.0.0.1",
+        host: process.env.DB_URL,
         user: "ayomikun",
         password: "",
         database: "filtwriter-db"
