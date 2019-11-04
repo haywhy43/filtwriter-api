@@ -10,7 +10,7 @@ const handleLogin = (req, res, db, bcrypt) => {
             const isValid = bcrypt.compareSync(req.body.password, data[0].password);
             if (isValid) {
                 let token = jwt.sign(data[0], config.secret, {
-                    expiresIn: "1h"
+                    expiresIn: "4h"
                 });
 
                 res.status(200).json({
