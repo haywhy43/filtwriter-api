@@ -40,7 +40,7 @@ app.use((req, res, next) => {
     next();
   });
 
-app.use(cors({ origin: "http://localhost:3001", credentials: true }));
+// app.use(cors({ origin: "http://localhost:3001", credentials: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -50,7 +50,7 @@ app.post("/register", (req, res) => {
     Register.handleRegister(req, res, db, bcrypt);
 });
 
-app.post("/login", cors(), (req, res) => {
+app.post("/login",  (req, res) => {
     Login.handleLogin(req, res, db, bcrypt);
 });
 
