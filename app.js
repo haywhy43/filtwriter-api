@@ -35,12 +35,7 @@ const db = knex({
     }
 });
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-  });
-
-// app.use(cors({ origin: "http://localhost:3001", credentials: true }));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -50,7 +45,7 @@ app.post("/register", (req, res) => {
     Register.handleRegister(req, res, db, bcrypt);
 });
 
-app.post("/login",  (req, res) => {
+app.post("/login", (req, res) => {
     Login.handleLogin(req, res, db, bcrypt);
 });
 
