@@ -35,7 +35,7 @@ const db = knex({
     }
 });
 
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3001", credentials: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -45,7 +45,7 @@ app.post("/register", (req, res) => {
     Register.handleRegister(req, res, db, bcrypt);
 });
 
-app.post("/login",cors(), (req, res) => {
+app.post("/login", cors(), (req, res) => {
     Login.handleLogin(req, res, db, bcrypt);
 });
 
@@ -64,7 +64,6 @@ app.post("/article/edit", verifyToken.checkToken, upload.single("picture"), (req
 app.post("/article/publish", verifyToken.checkToken, upload.single("picture"), (req, res) => {
     UploadArticle.handlePublish(req, res, cloudinary, db);
 });
-
 
 app.delete("/article/delete", verifyToken.checkToken, (req, res) => {
     Articles.handleDelete(req, res, db);
