@@ -35,7 +35,7 @@ const db = knex({
     }
 });
 
-app.use(cors());
+app.use(cors({credentials: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
