@@ -31,12 +31,12 @@ const db = knex({
     client: "pg",
     connection: {
         host: process.env.DATABASE_URL,
-        user: "ayomikun",
-        database: 'filtwriter-db'
-        // ssl: true
+        // user: "ayomikun",
+        // database: 'filtwriter-db',
+        ssl: true
     }
 });
-app.use(cors())
+app.use(cors({credentials: true}))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
