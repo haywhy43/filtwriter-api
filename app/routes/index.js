@@ -39,4 +39,7 @@ export default ({ db, cloudinary }) => {
     api.delete("/article/delete", (req, res) => {
         Article.handleDelete(req, res, db);
     });
+
+
+    return api;
 };
