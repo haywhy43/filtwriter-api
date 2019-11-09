@@ -35,7 +35,7 @@ const db = knex({
     }
 });
 
-app.use(cors({credentials: true}));
+app.use(cors({ credentials: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -47,6 +47,12 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
     Login.handleLogin(req, res, db, bcrypt);
+});
+app.options("/login", (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Headers", "*");
+    res.end();
 });
 
 app.get("/articles", verifyToken.checkToken, (req, res) => {
