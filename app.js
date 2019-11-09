@@ -30,16 +30,13 @@ const upload = multer({ dest: "uploads/" });
 const db = knex({
     client: "pg",
     connection: {
-        connectionString: process.env.DATABASE_URL,
-        ssl: true
+        host: process.env.DATABASE_URL,
+        user: "ayomikun",
+        database: 'filtwriter-db'
+        // ssl: true
     }
 });
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -49,7 +46,7 @@ app.post("/register", (req, res) => {
     Register.handleRegister(req, res, db, bcrypt);
 });
 
-app.post("/login", (req, res) => {
+app.post("/login",cors(), (req, res) => {
     Login.handleLogin(req, res, db, bcrypt);
 });
 
