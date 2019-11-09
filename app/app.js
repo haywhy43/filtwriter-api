@@ -29,9 +29,10 @@ app.use((req, res, next) => {
 
 try {
     initializeDb(db => {
-        app.use(jwt());
 
-        app.use(api({ db, cloudinary }));
+        app.use(jwt())
+
+        app.use('/routes',api({ db, cloudinary, jwt }));
 
         app.listen(process.env.PORT, () => {
             console.log("localhost is listening on port " + port);

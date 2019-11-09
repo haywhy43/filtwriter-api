@@ -1,5 +1,28 @@
+/**
+ * @function handleArticles
+ * @description Return all articles in db
+ * @param {*} req
+ * @param {*} res
+ * @param {*} db
+ */
+
+const handleArticles = (req, res, db) => {
+    db.select("*")
+        .from("articles")
+        .then(data => {
+            res.json(data);
+        });
+};
+
+/**
+ * @function handleUpload
+ * @description Upload a new article to the db
+ * @param {*} req
+ * @param {*} res
+ * @param {*} cloudinary
+ * @param {*} db
+ */
 const handleUpload = (req, res, cloudinary, db) => {
-    // cloudinary.config(setting.cloudinary);
     const data = req.body;
     cloudinary.uploader.upload(req.file.path, function(error, result) {
         db("articles")
@@ -18,6 +41,15 @@ const handleUpload = (req, res, cloudinary, db) => {
             });
     });
 };
+
+/**
+ * @function handleEdit
+ * @description edit an existing article and updating in db
+ * @param {*} req
+ * @param {*} res
+ * @param {*} cloudinary
+ * @param {*} db
+ */
 
 const handleEdit = (req, res, cloudinary, db) => {
     const { author, title, body, profile_id } = req.body;
@@ -43,6 +75,15 @@ const handleEdit = (req, res, cloudinary, db) => {
     }
 };
 
+/**
+ * @function handlePublish
+ * @description Publish an article
+ * @param {*} req
+ * @param {*} res
+ * @param {*} cloudinary
+ * @param {*} db
+ */
+
 const handlePublish = (req, res, cloudinary, db) => {
     const { author, title, body } = req.body;
     cloudinary.uploader.upload(req.file.path, function(error, result) {
@@ -63,4 +104,21 @@ const handlePublish = (req, res, cloudinary, db) => {
     });
 };
 
-module.exports = { handleUpload, handleEdit, handlePublish };
+/**
+ * @function handleDelete
+ * @description Delete an article
+ * @param {*} req
+ * @param {*} res
+ * @param {*} db
+ */
+
+const handleDelete = (req, res, db) => {
+    db("articles")
+        .where({ id: req.body.id })
+        .del()
+        .then(data => {
+            res.json("sucess");
+        });
+};
+
+export default { handleUpload, handleEdit, handlePublish, handleDelete, handleArticles };
