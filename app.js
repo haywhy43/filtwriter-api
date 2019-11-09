@@ -35,7 +35,7 @@ const db = knex({
     }
 });
 
-app.use(cors({credentials: true}));
+// app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -45,7 +45,7 @@ app.post("/register", (req, res) => {
     Register.handleRegister(req, res, db, bcrypt);
 });
 
-app.post("/login", cors(), (req, res) => {
+app.post("/login", (req, res) => {
     Login.handleLogin(req, res, db, bcrypt);
 });
 
