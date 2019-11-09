@@ -35,7 +35,12 @@ const db = knex({
     }
 });
 
-// app.use(cors());
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        optionsSuccessStatus: 200
+    })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -43,13 +48,6 @@ app.get("/", verifyToken.checkToken, Home.homeController);
 
 app.post("/register", (req, res) => {
     Register.handleRegister(req, res, db, bcrypt);
-});
-
-app.options("/login", (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "*");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.end();
 });
 
 app.post("/login", (req, res) => {
