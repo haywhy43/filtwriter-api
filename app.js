@@ -31,14 +31,25 @@ const db = knex({
     client: "pg",
     connection: {
         connectionString: process.env.DATABASE_URL,
-        user: 'peafngzxrmturs',
-        database: 'd987vpb6s8jq8',
+        user: "peafngzxrmturs",
+        database: "d987vpb6s8jq8",
         ssl: true
     }
 });
-app.use(cors({credentials: true}))
+app.use(cors({ credentials: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,X-Access-Token,XKey,Authorization"
+    );
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 app.get("/", verifyToken.checkToken, Home.homeController);
 
@@ -46,7 +57,7 @@ app.post("/register", (req, res) => {
     Register.handleRegister(req, res, db, bcrypt);
 });
 
-app.post("/login",cors(), (req, res) => {
+app.post("/login", cors(), (req, res) => {
     Login.handleLogin(req, res, db, bcrypt);
 });
 
