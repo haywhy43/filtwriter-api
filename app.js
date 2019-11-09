@@ -45,6 +45,13 @@ app.post("/register", (req, res) => {
     Register.handleRegister(req, res, db, bcrypt);
 });
 
+app.options("/login", (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Headers", "*");
+    res.end();
+});
+
 app.post("/login", (req, res) => {
     Login.handleLogin(req, res, db, bcrypt);
 });
