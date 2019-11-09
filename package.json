@@ -2,9 +2,10 @@
   "name": "filtwriter-api",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "./app/app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon ./app/app.js --exec babel-node --presets babel-preset-env",
+    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
