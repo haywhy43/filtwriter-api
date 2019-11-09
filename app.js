@@ -57,7 +57,7 @@ app.post("/register", (req, res) => {
     Register.handleRegister(req, res, db, bcrypt);
 });
 
-app.post("/login", cors(), (req, res) => {
+app.post("/login", cors({ credentials: true }), (req, res) => {
     Login.handleLogin(req, res, db, bcrypt);
 });
 
