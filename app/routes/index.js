@@ -11,7 +11,7 @@ export default ({ db, cloudinary,jwt }) => {
     });
 
     api.get("/articles", (req, res) => {
-        Article.handleArticle(req, res, db);
+        Article.handleArticles(req, res, db);
     });
 
     api.post("/article/upload", upload.single("picture"), (req, res) => {
