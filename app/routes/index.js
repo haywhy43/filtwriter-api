@@ -1,8 +1,9 @@
 import { Router } from "express";
 import multer from "multer";
 import Article from "../controllers/article";
+import { checkToken } from "../middleware/jwt";
 
-export default ({ db, cloudinary,jwt }) => {
+export default ({ db, cloudinary, jwt }) => {
     const api = Router();
     const upload = multer({ dest: "uploads/" });
 

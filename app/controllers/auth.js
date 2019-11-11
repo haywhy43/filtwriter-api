@@ -32,6 +32,7 @@ const handleLogin = (req, res, db, bcrypt) => {
                 });
             }
         });
+
 };
 
 /**
