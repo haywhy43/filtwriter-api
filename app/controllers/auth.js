@@ -1,3 +1,6 @@
+import jwt from 'jsonwebtoken'
+import config from '../config';
+
 /**
  * @function handleLogin
  * @description Authenticate a user
@@ -54,3 +57,5 @@ const handleRegister = (req, res, db, bcrypt) => {
             res.send(data);
         });
 };
+
+export default {handleLogin, handleRegister}

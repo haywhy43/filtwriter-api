@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import Article from "../controllers/article";
 
-export default ({ db, cloudinary }) => {
+export default ({ db, cloudinary,jwt }) => {
     const api = Router();
     const upload = multer({ dest: "uploads/" });
 
