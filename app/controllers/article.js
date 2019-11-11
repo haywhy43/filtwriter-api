@@ -23,21 +23,22 @@ const handleArticles = (req, res, db) => {
  * @param {*} db
  */
 const handleUpload = (req, res, cloudinary, db) => {
-    const data = req.body;
+    const { author, title, body } = req.body;
     cloudinary.uploader.upload(req.file.path, function(error, result) {
         db("articles")
             .insert({
-                author: data.author,
-                title: data.title,
-                body: data.body,
+                author: author,
+                title: title,
+                body: body,
                 profile_id: result.public_id,
-                created: "now"
+                created: "now",
+                is_published: false
             })
             .then(data => {
-                res.status(200).send("Success");
+                res.status(200).json("Success");
             })
             .catch(error => {
-                res.send("Failed");
+                res.status(400).json("Failed");
             });
     });
 };
@@ -52,10 +53,10 @@ const handleUpload = (req, res, cloudinary, db) => {
  */
 
 const handleEdit = (req, res, cloudinary, db) => {
-    const { author, title, body, profile_id } = req.body;
+    const { author, title, body, profile_id, id } = req.body;
     const update = result => {
         db("articles")
-            .where({ id: req.body.id })
+            .where({ id: id })
             .update({
                 title: title,
                 author: author,
@@ -84,24 +85,23 @@ const handleEdit = (req, res, cloudinary, db) => {
  * @param {*} db
  */
 
-const handlePublish = (req, res, cloudinary, db) => {
-    const { author, title, body } = req.body;
-    cloudinary.uploader.upload(req.file.path, function(error, result) {
-        db("published_articles")
-            .insert({
-                author: author,
-                title: title,
-                body: body,
-                profile_id: result.public_id,
-                created: "now"
-            })
-            .then(data => {
-                res.status(200).send("Success");
-            })
-            .catch(error => {
-                res.send(error);
+const handlePublish = (req, res, db) => {
+    const { id } = req.body;
+    db("articles")
+        .where({ id: id })
+        .update({ is_published: true })
+        .then(data => {
+            res.json({
+                success: "true",
+                message: "Article Published."
             });
-    });
+        })
+        .catch(error => {
+            res.json({
+                error: true,
+                message: "Unable to publish Article, please try again"
+            });
+        });
 };
 
 /**
@@ -117,7 +117,7 @@ const handleDelete = (req, res, db) => {
         .where({ id: req.body.id })
         .del()
         .then(data => {
-            res.json("sucess");
+            res.json("success");
         });
 };
 
