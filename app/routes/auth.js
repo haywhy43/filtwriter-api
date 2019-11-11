@@ -1,11 +1,10 @@
 import { Router } from "express";
-// import multer from "multer";
 import Auth from "../controllers/auth";
 import bcrypt from "bcryptjs";
 
-export default ({ db, cloudinary, jwt }) => {
+export default ({ db}) => {
     const auth = Router();
-    // const upload = multer({ dest: "uploads/" });
+
     auth.post("/register", (req, res) => {
         Auth.handleRegister(req, res, db, bcrypt);
     });

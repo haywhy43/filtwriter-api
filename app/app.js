@@ -6,10 +6,9 @@ import bodyParser from "body-parser";
 import initializeDb from "./db";
 import jwt from "./middleware/jwt";
 import api from "./routes/index";
-// import auth from "./routes/auth"
+import auth from "./routes/auth";
 const cloudinary = require("cloudinary").v2;
-import Auth from "./controllers/auth";
-import bcrypt from "bcryptjs";
+
 
 // config
 const setting = require("./config");
@@ -33,19 +32,11 @@ app.use((req, res, next) => {
 
 try {
     initializeDb(db => {
-        // app.use()
+        app.use(jwt.checkToken);
 
-        app.use(jwt.checkToken, api({ db, cloudinary, jwt }));
+        app.use(api({ db, cloudinary, jwt }));
 
-        app.post("/register", (req, res) => {
-            Auth.handleRegister(req, res, db, bcrypt);
-        });
-    
-        app.post("/login", (req, res) => {
-            Auth.handleLogin(req, res, db, bcrypt);
-        });
-
-        // app.use("/routes/auth", auth({ db }));
+        app.use(auth({ db }));
 
         app.server.listen(process.env.PORT, () => {
             console.log("localhost is listening on port " + process.env.PORT);
