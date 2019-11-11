@@ -2,6 +2,6 @@ const dashboardController = (req, res, db) => {
     
 };
 
-module.exports = {
+export default {
     dashboardController
 };

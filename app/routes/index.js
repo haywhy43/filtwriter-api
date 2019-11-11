@@ -1,14 +1,14 @@
 import { Router } from "express";
 import multer from "multer";
 import Article from "../controllers/article";
-import { checkToken } from "../middleware/jwt";
+import Dashboard from "../controllers/dashboard";
 
 export default ({ db, cloudinary, jwt }) => {
     const api = Router();
     const upload = multer({ dest: "uploads/" });
 
     api.get("/", (req, res) => {
-        res.send("Filt-writer Api");
+        Dashboard.dashboardController(req, res, db);
     });
 
     api.get("/articles", (req, res) => {
@@ -23,8 +23,8 @@ export default ({ db, cloudinary, jwt }) => {
         Article.handleEdit(req, res, cloudinary, db);
     });
 
-    api.post("/article/publish", upload.single("picture"), (req, res) => {
-        Article.handlePublish(req, res, cloudinary, db);
+    api.post("/article/publish", (req, res) => {
+        Article.handlePublish(req, res, db);
     });
 
     api.delete("/article/delete", (req, res) => {
