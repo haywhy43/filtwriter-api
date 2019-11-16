@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 const checkToken = (req, res, next) => {
-    if (req.path != "/login" && req.path != register) {
+    if (req.path != "/login" && req.path != "/register") {
         let token = req.headers["x-access-token"] || req.headers["authorization"] || " ";
 
         if (token.startsWith("Bearer ")) {
