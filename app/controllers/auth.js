@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken'
-import config from '../config';
+import jwt from "jsonwebtoken";
+import config from "../config";
 
 /**
  * @function handleLogin
@@ -32,7 +32,6 @@ const handleLogin = (req, res, db, bcrypt) => {
                 });
             }
         });
-
 };
 
 /**
@@ -55,8 +54,18 @@ const handleRegister = (req, res, db, bcrypt) => {
             password: hash
         })
         .then(data => {
-            res.send(data);
+            db("dashboard_data")
+                .increment("no_of_authors", 1)
+                .then(response => {
+                    res.json({ success: true, message: "Updated data successfully" });
+                })
+                .catch(error => {
+                    res.json({ error: true, message: "unable to update" });
+                });
+        })
+        .catch(error => {
+            res.json({ error: true, message: "unable to register user" });
         });
 };
 
-export default {handleLogin, handleRegister}
+export default { handleLogin, handleRegister };
