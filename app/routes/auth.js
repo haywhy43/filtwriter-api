@@ -1,8 +1,8 @@
-import { Router } from "express";
-import Auth from "../controllers/auth";
-import bcrypt from "bcryptjs";
+const { Router } = require("express");
+const Auth = require("../controllers/auth");
+const bcrypt = require("bcryptjs");
 
-export default ({ db}) => {
+module.exports = ({ db }) => {
     const auth = Router();
 
     auth.post("/register", (req, res) => {

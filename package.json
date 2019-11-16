@@ -4,7 +4,7 @@
   "description": "",
   "main": "./app/app.js",
   "scripts": {
-    "start": "nodemon ./app/app.js --exec babel-node --presets babel-preset-env",
+    "start": "node ./app/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

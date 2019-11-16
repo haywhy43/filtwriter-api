@@ -1,9 +1,9 @@
-import { Router } from "express";
-import multer from "multer";
-import Article from "../controllers/article";
-import Dashboard from "../controllers/dashboard";
+const { Router } = require("express");
+const multer = require("multer");
+const Article = require("../controllers/article");
+const Dashboard = require("../controllers/dashboard");
 
-export default ({ db, cloudinary, jwt }) => {
+module.exports = ({ db, cloudinary, jwt }) => {
     const api = Router();
     const upload = multer({ dest: "uploads/" });
 

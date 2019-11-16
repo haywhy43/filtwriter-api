@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 const checkToken = (req, res, next) => {
-    if (req.path != "/login") {
+    if (req.path != "/login" && req.path != register) {
         let token = req.headers["x-access-token"] || req.headers["authorization"] || " ";
 
         if (token.startsWith("Bearer ")) {
@@ -26,9 +26,9 @@ const checkToken = (req, res, next) => {
                 message: "Auth token is not supplied"
             });
         }
-    }else{
+    } else {
         next();
     }
 };
 
-export default { checkToken };
+module.exports = { checkToken };

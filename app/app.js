@@ -1,12 +1,12 @@
-import http from "http";
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import bodyParser from "body-parser";
-import initializeDb from "./db";
-import jwt from "./middleware/jwt";
-import api from "./routes/index";
-import auth from "./routes/auth";
+const http = require("http");
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const initializeDb = require("./db");
+const jwt = require("./middleware/jwt");
+const api = require("./routes/index");
+const auth = require("./routes/auth");
 const cloudinary = require("cloudinary").v2;
 
 

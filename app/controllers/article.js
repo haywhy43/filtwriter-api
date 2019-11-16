@@ -127,4 +127,4 @@ const handleDelete = (req, res, db) => {
         });
 };
 
-export default { handleUpload, handleEdit, handlePublish, handleDelete, handleArticles };
+module.exports = { handleUpload, handleEdit, handlePublish, handleDelete, handleArticles };

@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import config from "../config";
+const jwt = require("jsonwebtoken");
+const config = require("../config");
 
 /**
  * @function handleLogin
@@ -68,4 +68,4 @@ const handleRegister = (req, res, db, bcrypt) => {
         });
 };
 
-export default { handleLogin, handleRegister };
+module.exports = { handleLogin, handleRegister };

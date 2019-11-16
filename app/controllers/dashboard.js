@@ -1,7 +1,5 @@
-const dashboardController = (req, res, db) => {
-    
-};
+const dashboardController = (req, res, db) => {};
 
-export default {
+module.exports = {
     dashboardController
 };
