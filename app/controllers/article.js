@@ -25,8 +25,8 @@ const handleArticles = (req, res, db) => {
 const handleUpload = (req, res, cloudinary, db) => {
     const { author, title, body } = req.body;
     cloudinary.uploader.upload(req.file.path, function(error, result) {
-        db("articles")
-            .insert({
+        db.transaction(trx => {
+            trx.insert({
                 author: author,
                 title: title,
                 body: body,
@@ -34,12 +34,17 @@ const handleUpload = (req, res, cloudinary, db) => {
                 created: "now",
                 is_published: false
             })
-            .then(data => {
-                res.status(200).json("Success");
-            })
-            .catch(error => {
-                res.status(400).json("Failed");
-            });
+                .into("articles")
+                .returning("*")
+                .then(data => {
+                    return trx("dashboard_data")
+                        .increment("no_of_saved_articles", 1)
+                        .then(response => res.json({ success: "true", message: "Dashboard data updated successfully" }))
+                        .catch(error => res.json({ error: "true", message: "Unable to update dashboard data" }));
+                })
+                .then(trx.commit)
+                .catch(trx.rollback);
+        });
     });
 };
 
@@ -81,7 +86,6 @@ const handleEdit = (req, res, cloudinary, db) => {
  * @description Publish an article
  * @param {*} req
  * @param {*} res
- * @param {*} cloudinary
  * @param {*} db
  */
 
@@ -91,10 +95,12 @@ const handlePublish = (req, res, db) => {
         .where({ id: id })
         .update({ is_published: true })
         .then(data => {
-            res.json({
-                success: "true",
-                message: "Article Published."
-            });
+            db("dashboard_data")
+                .increment("no_of_published_articles", 1)
+                .then(data => res.json({ success: true, message: "Dashboard data updated successfully" }))
+                .catch(error => {
+                    res.json({ error: true, message: "unable to update dashboard data" });
+                });
         })
         .catch(error => {
             res.json({
