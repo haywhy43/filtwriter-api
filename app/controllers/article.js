@@ -11,6 +11,9 @@ const handleArticles = (req, res, db) => {
         .from("articles")
         .then(data => {
             res.json(data);
+        })
+        .catch(error => {
+            res.json("Sorry, an error has occured.");
         });
 };
 
