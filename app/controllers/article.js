@@ -126,7 +126,17 @@ const handleDelete = (req, res, db) => {
         .where({ id: req.body.id })
         .del()
         .then(data => {
-            res.json("success");
+            db("dashboard_data")
+                .decrement("no_of_saved_articles", 1)
+                .then(data => {
+                    res.json({ success: true, message: "Dashboard data updated successfully" });
+                })
+                .catch(error => {
+                    res.json({ error: true, message: "Unable to update dashboard data" });
+                });
+        })
+        .catch(error => {
+            res.json({ error: true, message: "Unable to delete article, please try again." });
         });
 };
 
