@@ -16,7 +16,7 @@ module.exports = ({ db, cloudinary, jwt }) => {
     });
 
     api.post("/article/upload", upload.single("picture"), (req, res) => {
-        Article.handleUpload(req, res, cloudinary, db);
+        Article.handleArticleCreate(req, res, cloudinary, db);
     });
 
     api.post("/article/edit", upload.single("picture"), (req, res) => {
@@ -34,6 +34,7 @@ module.exports = ({ db, cloudinary, jwt }) => {
     api.post("/image/upload", upload.single("upload"), (req, res) => {
         Article.handleImageUpload(req, res, cloudinary);
     });
+
 
     return api;
 };

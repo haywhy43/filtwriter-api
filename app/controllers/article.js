@@ -25,14 +25,14 @@ const handleArticles = (req, res, db) => {
  * @param {*} cloudinary
  * @param {*} db
  */
-const handleUpload = (req, res, cloudinary, db) => {
-    const { author, title, body } = req.body;
+const handleArticleCreate = (req, res, cloudinary, db) => {
+    const { author, title } = req.body;
     cloudinary.uploader.upload(req.file.path, function(error, result) {
         db.transaction((trx) => {
             trx.insert({
                 author: author,
                 title: title,
-                body: body,
+                body: "",
                 profile_id: result.public_id,
                 created: "now",
                 is_published: false
@@ -53,12 +53,18 @@ const handleUpload = (req, res, cloudinary, db) => {
     });
 };
 
+
+/**
+ * @function handleImageUpload
+ * @description Upload a image to cloudinary
+ * @param {*} req
+ * @param {*} res
+ * @param {*} cloudinary
+ */
 const handleImageUpload = (req, res, cloudinary) => {
     cloudinary.uploader.upload(req.file.path, function(error, result) {
         res.json({ url: result.url });
     });
-
-    // res.send()
 };
 
 /**
@@ -71,27 +77,16 @@ const handleImageUpload = (req, res, cloudinary) => {
  */
 
 const handleEdit = (req, res, cloudinary, db) => {
-    const { author, title, body, profile_id, id } = req.body;
-    const update = (result) => {
-        db("articles")
-            .where({ id: id })
-            .update({
-                title: title,
-                author: author,
-                body: body,
-                profile_id: result ? result.public_id : profile_id
-            })
-            .then((data) => {
-                res.json(data);
-            });
-    };
-    if (req.file) {
-        cloudinary.uploader.upload(req.file.path, function(error, result) {
-            update(result);
+    const { body, id } = req.body;
+    db("articles")
+        .where({ id: id })
+        .update({
+            body
+        })
+        .returning("*")
+        .then((data) => {
+            res.json(data);
         });
-    } else {
-        update();
-    }
 };
 
 /**
@@ -150,4 +145,11 @@ const handleDelete = (req, res, db) => {
         });
 };
 
-module.exports = { handleUpload, handleEdit, handlePublish, handleDelete, handleArticles, handleImageUpload };
+module.exports = {
+    handleArticleCreate,
+    handleEdit,
+    handlePublish,
+    handleDelete,
+    handleArticles,
+    handleImageUpload,
+};
