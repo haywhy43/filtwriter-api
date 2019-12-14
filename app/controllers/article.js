@@ -9,10 +9,10 @@
 const handleArticles = (req, res, db) => {
     db.select("*")
         .from("articles")
-        .then(data => {
+        .then((data) => {
             res.json(data);
         })
-        .catch(error => {
+        .catch((error) => {
             res.json("Sorry, an error has occured.");
         });
 };
@@ -28,7 +28,7 @@ const handleArticles = (req, res, db) => {
 const handleUpload = (req, res, cloudinary, db) => {
     const { author, title, body } = req.body;
     cloudinary.uploader.upload(req.file.path, function(error, result) {
-        db.transaction(trx => {
+        db.transaction((trx) => {
             trx.insert({
                 author: author,
                 title: title,
@@ -39,16 +39,26 @@ const handleUpload = (req, res, cloudinary, db) => {
             })
                 .into("articles")
                 .returning("*")
-                .then(data => {
+                .then((data) => {
                     return trx("dashboard_data")
                         .increment("no_of_saved_articles", 1)
-                        .then(response => res.json({ success: "true", message: "Dashboard data updated successfully" }))
-                        .catch(error => res.json({ error: "true", message: "Unable to update dashboard data" }));
+                        .then((response) =>
+                            res.json({ success: "true", message: "Dashboard data updated successfully" })
+                        )
+                        .catch((error) => res.json({ error: "true", message: "Unable to update dashboard data" }));
                 })
                 .then(trx.commit)
                 .catch(trx.rollback);
         });
     });
+};
+
+const handleImageUpload = (req, res, cloudinary) => {
+    cloudinary.uploader.upload(req.file.path, function(error, result) {
+        res.json({ url: result.url });
+    });
+
+    // res.send()
 };
 
 /**
@@ -62,7 +72,7 @@ const handleUpload = (req, res, cloudinary, db) => {
 
 const handleEdit = (req, res, cloudinary, db) => {
     const { author, title, body, profile_id, id } = req.body;
-    const update = result => {
+    const update = (result) => {
         db("articles")
             .where({ id: id })
             .update({
@@ -71,7 +81,7 @@ const handleEdit = (req, res, cloudinary, db) => {
                 body: body,
                 profile_id: result ? result.public_id : profile_id
             })
-            .then(data => {
+            .then((data) => {
                 res.json(data);
             });
     };
@@ -97,15 +107,15 @@ const handlePublish = (req, res, db) => {
     db("articles")
         .where({ id: id })
         .update({ is_published: true })
-        .then(data => {
+        .then((data) => {
             db("dashboard_data")
                 .increment("no_of_published_articles", 1)
-                .then(data => res.json({ success: true, message: "Dashboard data updated successfully" }))
-                .catch(error => {
+                .then((data) => res.json({ success: true, message: "Dashboard data updated successfully" }))
+                .catch((error) => {
                     res.json({ error: true, message: "unable to update dashboard data" });
                 });
         })
-        .catch(error => {
+        .catch((error) => {
             res.json({
                 error: true,
                 message: "Unable to publish Article, please try again"
@@ -125,19 +135,19 @@ const handleDelete = (req, res, db) => {
     db("articles")
         .where({ id: req.body.id })
         .del()
-        .then(data => {
+        .then((data) => {
             db("dashboard_data")
                 .decrement("no_of_saved_articles", 1)
-                .then(data => {
+                .then((data) => {
                     res.json({ success: true, message: "Dashboard data updated successfully" });
                 })
-                .catch(error => {
+                .catch((error) => {
                     res.json({ error: true, message: "Unable to update dashboard data" });
                 });
         })
-        .catch(error => {
+        .catch((error) => {
             res.json({ error: true, message: "Unable to delete article, please try again." });
         });
 };
 
-module.exports = { handleUpload, handleEdit, handlePublish, handleDelete, handleArticles };
+module.exports = { handleUpload, handleEdit, handlePublish, handleDelete, handleArticles, handleImageUpload };
